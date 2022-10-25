@@ -1,0 +1,31 @@
+ game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(key)
+ if key == "y" then
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors%20Entity%20Spawner/Source.lua"))()
+
+-- Create entity
+local entity = Creator.createEntity({
+    Model = "https://github.com/Xactver/Xactver/raw/main/vanwow.rbxm",
+    Speed = 180,
+    DelayTime = 2,
+    HeightOffset = 0,
+    CanKill = true,
+    BreakLights = false,
+    FlickerLights = {
+        true,
+        2,
+    },
+    Cycles = {
+        Min = 2,
+        Max = 6,
+        WaitTime = 2,
+    },
+    CamShake = {
+        true,
+        {5, 15, 0.1, 1},
+        100,
+    },
+    CustomDialog = {"You died to the kidnapper.", "Try not to hide in his van, hide in a closet.", "Hes really fast"},
+})
+
+Creator.runEntity(entity)
+end end)
