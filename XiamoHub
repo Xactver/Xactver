@@ -1,0 +1,62 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local WDoors = OrionLib:MakeWindow({Name = "Xiamo Hub - Doors", HidePremium = false, SaveConfig = true, ConfigFolder = "XiamoHub"})
+
+local Tab1 = WDoors:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local Section1 = Tab1:AddSection({
+	Name = "LocalPlayer"
+})
+local Section2 = Tab1:AddSection({
+	Name = "Game"
+})
+
+Section1:AddToggle({
+	Name = "Instant Interact",
+	Default = false,
+    Flag = "InstantToggle",
+    Save = true
+})
+game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(prompt)
+    if OrionLib.Flags["InstantToggle"].Value == true then
+        fireproximityprompt(prompt)
+    end
+end)
+
+Section2:AddToggle({
+	Name = "No seek arms",
+	Default = false,
+    Flag = "NoSeek",
+    Save = true
+})
+
+game:GetService("Workspace").CurrentRooms.DescendantAdded:Connect(function(descendant)
+    if OrionLib.Flags["NoSeek"].Value == true and descendant.Name == ("Seek_Arm" or "ChandelierObstruction") then
+        task.spawn(function()
+            wait()
+            descendant:Destroy()
+        end)
+    end
+end)
+
+local TargetWalkspeed
+Section2:AddSlider({
+	Name = "Speed",
+	Min = 0,
+	Max = 50,
+	Default = 2,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	Callback = function(Value)
+		TargetWalkspeed = Value
+	end    
+})
+game:GetService("RunService").RenderStepped:Connect(function()
+    pcall(function()
+        if game.Players.LocalPlayer.Character.Humanoid.MoveDirection.Magnitude > 0 then
+            game.Players.LocalPlayer.Character:TranslateBy(game.Players.LocalPlayer.Character.Humanoid.MoveDirection * TargetWalkspeed/50)
+        end
+    end)
+end) 
